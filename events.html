@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Book Signings | Dr. Abdulqadir Abukar Mursal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #d69e2e;
+            --accent: #38b2ac;
+            --background: #fafafa;
+            --text: #2d3748;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 54, 93, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .event-card {
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            border-left-color: var(--accent);
+            transform: translateX(8px);
+        }
+        
+        .event-card.past {
+            opacity: 0.7;
+            border-left-color: #9ca3af;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+        }
+        
+        .calendar-day {
+            background: white;
+            padding: 0.5rem;
+            min-height: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .calendar-day.has-event {
+            background: #fef3c7;
+            cursor: pointer;
+        }
+        
+        .calendar-day.has-event:hover {
+            background: #fde68a;
+        }
+        
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 50%;
+            margin: 1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="font-display text-xl font-bold text-gray-900">
+                        Dr. Abdulqadir Mursal
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-gray-700 hover:text-yellow-600">Home</a>
+                        <a href="book.html" class="nav-link text-gray-700 hover:text-yellow-600">Book</a>
+                        <a href="about.html" class="nav-link text-gray-700 hover:text-yellow-600">About</a>
+                        <a href="events.html" class="nav-link text-yellow-600">Events</a>
+                        <a href="gallery.html" class="nav-link text-gray-700 hover:text-yellow-600">Gallery</a>
+                        <a href="index.html#purchase" class="btn-primary text-white px-6 py-2 rounded-full text-sm font-medium">Get the Book</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-yellow-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Home</a>
+                <a href="book.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Book</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">About</a>
+                <a href="events.html" class="block px-3 py-2 text-yellow-600 font-medium">Events</a>
+                <a href="gallery.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Gallery</a>
+                <a href="index.html#purchase" class="block px-3 py-2 text-yellow-600 font-medium">Get the Book</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Events Header -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <h1 class="font-display text-5xl font-bold text-gray-900 mb-4">
+                    Events & Book Signings
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                    Join Dr. Abdulqadir Abukar Mursal at upcoming events to meet the author, 
+                    learn about psychology, and get your copy of "Cilmi Nafsiga Aadanaha" signed.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button id="upcoming-events-btn" class="btn-primary text-white px-8 py-3 rounded-full text-lg font-medium">
+                        Upcoming Events
+                    </button>
+                    <button id="past-events-btn" class="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-full text-lg font-medium hover:border-yellow-500 hover:text-yellow-600 transition-colors">
+                        Past Events
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Statistics -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8 text-center">
+                <div class="reveal">
+                    <div class="text-4xl font-bold text-yellow-600 mb-2">15+</div>
+                    <div class="text-gray-600">Events This Year</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl font-bold text-yellow-600 mb-2">2500+</div>
+                    <div class="text-gray-600">Attendees</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl font-bold text-yellow-600 mb-2">8</div>
+                    <div class="text-gray-600">Cities Visited</div>
+                </div>
+                <div class="reveal">
+                    <div class="text-4xl font-bold text-yellow-600 mb-2">500+</div>
+                    <div class="text-gray-600">Books Signed</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Events -->
+    <section id="upcoming-events" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Upcoming Events</h2>
+                <p class="text-xl text-gray-600">Don't miss these exciting opportunities to engage with Dr. Mursal</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">January 15, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Book Signing</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Book Signing at Mogadishu University</h4>
+                    <p class="text-gray-600 mb-4">
+                        Meet Dr. Mursal and get your copy of "Cilmi Nafsiga Aadanaha" signed. 
+                        A great opportunity to discuss psychology and ask questions about the book.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>10:00 AM - 2:00 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>Main Campus, Mogadishu University</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">👥</span>
+                            <span>Open to all students and faculty</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Register Now
+                    </button>
+                </div>
+                
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">February 8, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Public Lecture</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Psychology in Health & Social Care</h4>
+                    <p class="text-gray-600 mb-4">
+                        An in-depth exploration of the role of psychology within health and social care settings, 
+                        with practical applications for professionals.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>3:00 PM - 5:00 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>Faculty of Health Sciences, Mogadishu University</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎫</span>
+                            <span>Free admission, registration required</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Learn More
+                    </button>
+                </div>
+                
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">March 20, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Book Exhibition</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Somali Education Fair</h4>
+                    <p class="text-gray-600 mb-4">
+                        Visit our booth at the annual education fair to explore all publications, 
+                        meet the author, and discover educational resources.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>9:00 AM - 6:00 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>National Convention Center, Mogadishu</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎫</span>
+                            <span>Free entry to exhibition area</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        View Details
+                    </button>
+                </div>
+                
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">April 12, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Workshop</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Mental Health Awareness Workshop</h4>
+                    <p class="text-gray-600 mb-4">
+                        A practical workshop for healthcare professionals and community leaders on recognizing 
+                        and addressing mental health challenges.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>9:00 AM - 4:00 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>Somali Medical Association</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎫</span>
+                            <span>Professional development credits available</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Register
+                    </button>
+                </div>
+                
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">May 18, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Conference Presentation</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">East African Psychology Conference</h4>
+                    <p class="text-gray-600 mb-4">
+                        Presenting research on culturally adapted psychological interventions and their 
+                        effectiveness in East African contexts.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>2:00 PM - 3:30 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>Nairobi, Kenya</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎫</span>
+                            <span>Conference registration required</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Conference Info
+                    </button>
+                </div>
+                
+                <div class="event-card bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-yellow-600 font-medium">June 25, 2025</span>
+                        <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Upcoming</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Community Forum</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Mental Health in Our Community</h4>
+                    <p class="text-gray-600 mb-4">
+                        An open community discussion about mental health challenges, resources, and 
+                        building support networks within the Somali community.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">🕐</span>
+                            <span>6:00 PM - 8:00 PM</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📍</span>
+                            <span>Community Center, Mogadishu</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎫</span>
+                            <span>Free and open to all community members</span>
+                        </div>
+                    </div>
+                    <button class="w-full btn-primary text-white px-6 py-3 rounded-full font-medium">
+                        Join Discussion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Events (Hidden by default) -->
+    <section id="past-events" class="py-16 bg-white hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Past Events</h2>
+                <p class="text-xl text-gray-600">Previous engagements and successful gatherings</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="event-card past bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 font-medium">December 10, 2024</span>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Completed</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Book Launch</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Cilmi Nafsiga Aadanaha Launch Event</h4>
+                    <p class="text-gray-600 mb-4">
+                        Successful launch of the book with over 200 attendees, including students, 
+                        academics, and community leaders.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">👥</span>
+                            <span>200+ attendees</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">📚</span>
+                            <span>150 books sold</span>
+                        </div>
+                    </div>
+                    <button class="w-full border-2 border-gray-300 text-gray-600 px-6 py-3 rounded-full font-medium hover:border-yellow-500 hover:text-yellow-600 transition-colors">
+                        View Photos
+                    </button>
+                </div>
+                
+                <div class="event-card past bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 font-medium">November 15, 2024</span>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Completed</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Academic Seminar</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Psychology Research Methods</h4>
+                    <p class="text-gray-600 mb-4">
+                        Interactive seminar on research methodologies in psychology for graduate students 
+                        and early-career researchers.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">👥</span>
+                            <span>80 participants</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🎓</span>
+                            <span>Graduate level</span>
+                        </div>
+                    </div>
+                    <button class="w-full border-2 border-gray-300 text-gray-600 px-6 py-3 rounded-full font-medium hover:border-yellow-500 hover:text-yellow-600 transition-colors">
+                        View Photos
+                    </button>
+                </div>
+                
+                <div class="event-card past bg-white p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-sm text-gray-500 font-medium">October 22, 2024</span>
+                        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">Completed</span>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-2">Community Workshop</h3>
+                    <h4 class="font-semibold text-gray-700 mb-3">Understanding Stress and Coping</h4>
+                    <p class="text-gray-600 mb-4">
+                        Community-based workshop on recognizing stress symptoms and developing 
+                        healthy coping strategies.
+                    </p>
+                    <div class="space-y-2 mb-6 text-sm text-gray-500">
+                        <div class="flex items-center">
+                            <span class="mr-2">👥</span>
+                            <span>120 participants</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="mr-2">🏥</span>
+                            <span>Community health focus</span>
+                        </div>
+                    </div>
+                    <button class="w-full border-2 border-gray-300 text-gray-600 px-6 py-3 rounded-full font-medium hover:border-yellow-500 hover:text-yellow-600 transition-colors">
+                        View Photos
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Calendar -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Event Calendar</h2>
+                <p class="text-xl text-gray-600">2025 Schedule Overview</p>
+            </div>
+            <div class="bg-white rounded-2xl p-8 shadow-lg reveal">
+                <div class="mb-6">
+                    <h3 class="font-display text-2xl font-bold text-gray-900 text-center">January 2025</h3>
+                </div>
+                <div class="calendar-grid rounded-lg overflow-hidden">
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Sun</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Mon</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Tue</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Wed</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Thu</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Fri</div>
+                    <div class="calendar-day font-semibold text-gray-500 text-center bg-gray-100">Sat</div>
+                    
+                    <!-- Calendar days -->
+                    <div class="calendar-day text-gray-400">29</div>
+                    <div class="calendar-day text-gray-400">30</div>
+                    <div class="calendar-day text-gray-400">31</div>
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day">10</div>
+                    <div class="calendar-day">11</div>
+                    
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day has-event">
+                        <div>15</div>
+                        <div class="flex">
+                            <div class="event-dot" title="Book Signing at Mogadishu University"></div>
+                        </div>
+                    </div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day">18</div>
+                    
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                </div>
+                <div class="mt-6 flex items-center justify-center space-x-6 text-sm">
+                    <div class="flex items-center">
+                        <div class="event-dot mr-2"></div>
+                        <span class="text-gray-600">Book Signing</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full mr-2"></div>
+                        <span class="text-gray-600">Lecture</span>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-gray-600">Workshop</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Statistics Chart -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Event Impact</h2>
+                <p class="text-xl text-gray-600">Reaching communities across the region</p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="reveal">
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-6">Events by Type</h3>
+                    <div id="events-chart" style="height: 300px;"></div>
+                </div>
+                <div class="reveal">
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-6">Monthly Attendance</h3>
+                    <div id="attendance-chart" style="height: 300px;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-8">
+                    <h3 class="font-display text-2xl font-bold mb-4">Dr. Abdulqadir Abukar Mursal</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Psychologist, author, and educator dedicated to advancing psychological knowledge 
+                        and mental health awareness in Somalia.
+                    </p>
+                </div>
+                <div class="border-t border-gray-800 pt-8">
+                    <div class="flex flex-wrap justify-center gap-6 mb-6">
+                        <a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                        <a href="book.html" class="text-gray-400 hover:text-white transition-colors">Book</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white transition-colors">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white transition-colors">Events</a>
+                        <a href="gallery.html" class="text-gray-400 hover:text-white transition-colors">Gallery</a>
+                    </div>
+                    <div class="flex justify-center items-center space-x-6 mb-6">
+                        <a href="mailto:contact@drmursal.com" class="text-gray-400 hover:text-white transition-colors">
+                            📧 contact@drmursal.com
+                        </a>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        © 2026 Dr. Abdulqadir Abukar Mursal. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+            
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+            
+            // Event toggle functionality
+            const upcomingBtn = document.getElementById('upcoming-events-btn');
+            const pastBtn = document.getElementById('past-events-btn');
+            const upcomingSection = document.getElementById('upcoming-events');
+            const pastSection = document.getElementById('past-events');
+            
+            if (upcomingBtn && pastBtn && upcomingSection && pastSection) {
+                upcomingBtn.addEventListener('click', function() {
+                    upcomingSection.classList.remove('hidden');
+                    pastSection.classList.add('hidden');
+                    upcomingBtn.classList.add('btn-primary');
+                    upcomingBtn.classList.remove('border-2', 'border-gray-300', 'text-gray-700');
+                    pastBtn.classList.remove('btn-primary');
+                    pastBtn.classList.add('border-2', 'border-gray-300', 'text-gray-700');
+                });
+                
+                pastBtn.addEventListener('click', function() {
+                    pastSection.classList.remove('hidden');
+                    upcomingSection.classList.add('hidden');
+                    pastBtn.classList.add('btn-primary');
+                    pastBtn.classList.remove('border-2', 'border-gray-300', 'text-gray-700');
+                    upcomingBtn.classList.remove('btn-primary');
+                    upcomingBtn.classList.add('border-2', 'border-gray-300', 'text-gray-700');
+                });
+            }
+            
+            // Event button handlers
+            const eventButtons = document.querySelectorAll('button');
+            eventButtons.forEach(button => {
+                if (button.textContent.includes('Register') || 
+                    button.textContent.includes('Learn More') || 
+                    button.textContent.includes('View Details') ||
+                    button.textContent.includes('Join Discussion') ||
+                    button.textContent.includes('Conference Info')) {
+                    button.addEventListener('click', function() {
+                        showComingSoonPopup('Event registration coming soon! Please check back later or contact us directly.');
+                    });
+                }
+                
+                if (button.textContent.includes('View Photos')) {
+                    button.addEventListener('click', function() {
+                        window.location.href = 'gallery.html';
+                    });
+                }
+            });
+            
+            // Initialize charts
+            initCharts();
+        });
+        
+        function showComingSoonPopup(message) {
+            const popup = document.createElement('div');
+            popup.className = 'fixed top-4 right-4 bg-white border border-gray-200 rounded-lg shadow-lg p-4 z-50 transform translate-x-full transition-transform duration-300';
+            popup.innerHTML = `
+                <div class="flex items-center">
+                    <div class="flex-shrink-0">
+                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm text-gray-700">${message}</p>
+                    </div>
+                    <div class="ml-4 flex-shrink-0">
+                        <button class="text-gray-400 hover:text-gray-600" onclick="this.parentElement.parentElement.parentElement.remove()">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.classList.remove('translate-x-full');
+            }, 100);
+            
+            setTimeout(() => {
+                popup.classList.add('translate-x-full');
+                setTimeout(() => {
+                    if (popup.parentElement) {
+                        popup.remove();
+                    }
+                }, 300);
+            }, 5000);
+        }
+        
+        function initCharts() {
+            // Events by Type Chart
+            const eventsChart = echarts.init(document.getElementById('events-chart'));
+            const eventsOption = {
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [{
+                    name: 'Events',
+                    type: 'pie',
+                    radius: '70%',
+                    data: [
+                        { value: 35, name: 'Book Signings', itemStyle: { color: '#d69e2e' } },
+                        { value: 25, name: 'Lectures', itemStyle: { color: '#38b2ac' } },
+                        { value: 20, name: 'Workshops', itemStyle: { color: '#1a365d' } },
+                        { value: 15, name: 'Conferences', itemStyle: { color: '#68d391' } },
+                        { value: 5, name: 'Community Events', itemStyle: { color: '#f6ad55' } }
+                    ],
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }]
+            };
+            eventsChart.setOption(eventsOption);
+            
+            // Monthly Attendance Chart
+            const attendanceChart = echarts.init(document.getElementById('attendance-chart'));
+            const attendanceOption = {
+                tooltip: {
+                    trigger: 'axis'
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun']
+                },
+                yAxis: {
+                    type: 'value'
+                },
+                series: [{
+                    data: [450, 380, 520, 290, 410, 350],
+                    type: 'line',
+                    smooth: true,
+                    itemStyle: { color: '#d69e2e' },
+                    areaStyle: {
+                        color: {
+                            type: 'linear',
+                            x: 0,
+                            y: 0,
+                            x2: 0,
+                            y2: 1,
+                            colorStops: [{
+                                offset: 0, color: 'rgba(214, 158, 46, 0.3)'
+                            }, {
+                                offset: 1, color: 'rgba(214, 158, 46, 0.1)'
+                            }]
+                        }
+                    }
+                }]
+            };
+            attendanceChart.setOption(attendanceOption);
+            
+            // Make charts responsive
+            window.addEventListener('resize', function() {
+                eventsChart.resize();
+                attendanceChart.resize();
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Dr. Abdulqadir Abukar Mursal | Psychologist & Author</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #d69e2e;
+            --accent: #38b2ac;
+            --background: #fafafa;
+            --text: #2d3748;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 54, 93, 0.3);
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--secondary);
+            border-radius: 50%;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 1.5rem;
+            width: 2px;
+            height: calc(100% - 1rem);
+            background: var(--secondary);
+            opacity: 0.3;
+        }
+        
+        .timeline-item:last-child::after {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="index.html" class="font-display text-xl font-bold text-gray-900">
+                        Dr. Abdulqadir Mursal
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="index.html" class="nav-link text-gray-700 hover:text-yellow-600">Home</a>
+                        <a href="book.html" class="nav-link text-gray-700 hover:text-yellow-600">Book</a>
+                        <a href="about.html" class="nav-link text-yellow-600">About</a>
+                        <a href="events.html" class="nav-link text-gray-700 hover:text-yellow-600">Events</a>
+                        <a href="gallery.html" class="nav-link text-gray-700 hover:text-yellow-600">Gallery</a>
+                        <a href="index.html#purchase" class="btn-primary text-white px-6 py-2 rounded-full text-sm font-medium">Get the Book</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-yellow-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="index.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Home</a>
+                <a href="book.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Book</a>
+                <a href="about.html" class="block px-3 py-2 text-yellow-600 font-medium">About</a>
+                <a href="events.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Events</a>
+                <a href="gallery.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Gallery</a>
+                <a href="index.html#purchase" class="block px-3 py-2 text-yellow-600 font-medium">Get the Book</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Author Hero -->
+    <section class="pt-24 pb-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <img src="resources/author.jpeg" alt="Dr. Abdulqadir Abukar Mursal" 
+                         class="w-full max-w-lg mx-auto rounded-lg shadow-2xl card-hover">
+                </div>
+                <div class="reveal">
+                    <h1 class="font-display text-5xl font-bold text-gray-900 mb-4">
+                        Dr. Abdulqadir Abukar Mursal
+                    </h1>
+                    <p class="text-xl text-yellow-600 mb-6 font-semibold">
+                        Psychologist • Author • Educator
+                    </p>
+                    <p class="text-gray-700 mb-8 leading-relaxed">
+                        A distinguished psychologist and academic at Mogadishu University, Dr. Mursal has dedicated 
+                        his career to advancing psychological education and mental health awareness in Somalia. 
+                        His passion for making psychological knowledge accessible has driven him to create 
+                        comprehensive educational materials in Somali.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-600">10+</div>
+                            <div class="text-sm text-gray-600">Years Experience</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-yellow-600">1000+</div>
+                            <div class="text-sm text-gray-600">Students Taught</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Biography -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Biography</h2>
+            </div>
+            <div class="prose prose-lg mx-auto reveal">
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    Dr. Abdulqadir Abukar Mursal's journey into psychology began with a deep curiosity about human 
+                    behavior and mental processes. Born and raised in Somalia, he experienced firsthand the challenges 
+                    faced by communities in accessing quality mental health education and services. This early 
+                    exposure shaped his commitment to making psychological knowledge accessible to Somali-speaking populations.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    His academic journey took him through rigorous training in psychology, where he distinguished 
+                    himself through his dedication to both theoretical understanding and practical application. 
+                    Dr. Mursal's research interests span developmental psychology, social psychology, and the 
+                    cultural factors that influence mental health and well-being.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    At Mogadishu University, Dr. Mursal has established himself as a beloved educator and mentor. 
+                    His teaching philosophy emphasizes critical thinking, cultural sensitivity, and the application 
+                    of psychological principles to real-world challenges. Students consistently praise his ability 
+                    to make complex concepts understandable and relevant to their lives and communities.
+                </p>
+                <p class="text-gray-700 leading-relaxed mb-8">
+                    Beyond the classroom, Dr. Mursal is actively involved in community outreach programs, 
+                    professional development workshops, and public education initiatives. His work has contributed 
+                    significantly to reducing stigma around mental health issues and promoting psychological 
+                    well-being across Somali communities.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Journey -->
+    <section class="py-16 bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Professional Journey</h2>
+                <p class="text-xl text-gray-600">A timeline of key milestones and achievements</p>
+            </div>
+            <div class="max-w-4xl mx-auto">
+                <div class="space-y-8">
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Academic Foundation</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2010-2014</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Completed undergraduate studies in psychology with honors, demonstrating exceptional 
+                                aptitude for understanding human behavior and research methodology.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Advanced Studies</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2014-2016</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Pursued graduate studies in clinical psychology, focusing on culturally appropriate 
+                                therapeutic approaches and community mental health interventions.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Joining Mogadishu University</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2016</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Began teaching career at Mogadishu University's Faculty of Health Sciences, 
+                                introducing innovative teaching methods and curriculum development.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Research & Publications</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2017-2022</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Conducted extensive research on Somali mental health perspectives and published 
+                                numerous academic papers on culturally informed psychological practice.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Community Leadership</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2020-Present</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Established community mental health programs and professional development 
+                                initiatives, becoming a leading voice in Somali psychology education.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item reveal">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="flex justify-between items-start mb-4">
+                                <h3 class="font-display text-xl font-bold text-gray-900">Authoring "Cilmi Nafsiga Aadanaha"</h3>
+                                <span class="text-sm text-yellow-600 font-medium">2024-2025</span>
+                            </div>
+                            <p class="text-gray-700">
+                                Completed comprehensive psychology textbook in Somali, marking a significant 
+                                milestone in making psychological knowledge accessible to Somali-speaking communities.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expertise Areas -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Areas of Expertise</h2>
+                <p class="text-xl text-gray-600">Specialized knowledge and research interests</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Clinical Psychology</h3>
+                    <p class="text-gray-600">
+                        Assessment, diagnosis, and treatment of mental health disorders with emphasis on 
+                        culturally appropriate therapeutic approaches.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-green-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Community Psychology</h3>
+                    <p class="text-gray-600">
+                        Understanding social systems and community dynamics to promote mental health 
+                        and well-being at the population level.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Educational Psychology</h3>
+                    <p class="text-gray-600">
+                        Learning processes, instructional design, and psychological principles 
+                        that enhance educational outcomes.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Cross-Cultural Psychology</h3>
+                    <p class="text-gray-600">
+                        Understanding how cultural factors influence human behavior and mental processes, 
+                        particularly in Somali contexts.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Health Psychology</h3>
+                    <p class="text-gray-600">
+                        The intersection of psychological and physical health, including stress, 
+                        coping mechanisms, and health behavior change.
+                    </p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover reveal">
+                    <div class="w-16 h-16 bg-teal-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-teal-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Research Methodology</h3>
+                    <p class="text-gray-600">
+                        Advanced research design, statistical analysis, and evidence-based practice 
+                        in psychological research.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Philosophy & Vision -->
+    <section class="py-16 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Philosophy & Vision</h2>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <blockquote class="text-2xl font-light text-gray-700 italic mb-6 font-accent">
+                        "Psychological knowledge should be accessible to all, regardless of language or background. 
+                        Understanding the human mind is fundamental to building healthier communities."
+                    </blockquote>
+                    <cite class="text-yellow-600 font-semibold">— Dr. Abdulqadir Abukar Mursal</cite>
+                </div>
+                <div class="reveal">
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Educational Mission</h3>
+                            <p class="text-gray-700">
+                                To provide high-quality, culturally relevant psychological education that empowers 
+                                individuals and communities to understand and improve mental health and well-being.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Research Vision</h3>
+                            <p class="text-gray-700">
+                                To conduct meaningful research that addresses the unique psychological needs and 
+                                strengths of Somali communities while contributing to the global understanding of human behavior.
+                            </p>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Community Impact</h3>
+                            <p class="text-gray-700">
+                                To reduce mental health stigma, promote psychological literacy, and build capacity 
+                                for mental health support within Somali communities worldwide.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <h2 class="font-display text-3xl font-bold text-gray-900 mb-4">Connect with Dr. Mursal</h2>
+                <p class="text-xl text-gray-600 mb-8">
+                    For speaking engagements, consultations, or academic collaborations
+                </p>
+                <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Professional Inquiries</h3>
+                            <p class="text-gray-600 mb-4">
+                                Speaking engagements, workshops, and consultations
+                            </p>
+                            <a href="mailto:speaking@drmursal.com" class="text-yellow-600 hover:text-yellow-700 font-medium">
+                                speaking@drmursal.com
+                            </a>
+                        </div>
+                        <div>
+                            <h3 class="font-display text-xl font-bold text-gray-900 mb-4">Academic Collaborations</h3>
+                            <p class="text-gray-600 mb-4">
+                                Research partnerships and educational initiatives
+                            </p>
+                            <a href="mailto:academic@drmursal.com" class="text-yellow-600 hover:text-yellow-700 font-medium">
+                                academic@drmursal.com
+                            </a>
+                        </div>
+                    </div>
+                    <div class="mt-8 pt-8 border-t border-gray-200">
+                        <p class="text-gray-600 mb-4">General inquiries</p>
+                        <a href="mailto:contact@drmursal.com" class="text-yellow-600 hover:text-yellow-700 font-medium text-lg">
+                            contact@drmursal.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-8">
+                    <h3 class="font-display text-2xl font-bold mb-4">Dr. Abdulqadir Abukar Mursal</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Psychologist, author, and educator dedicated to advancing psychological knowledge 
+                        and mental health awareness in Somalia.
+                    </p>
+                </div>
+                <div class="border-t border-gray-800 pt-8">
+                    <div class="flex flex-wrap justify-center gap-6 mb-6">
+                        <a href="index.html" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                        <a href="book.html" class="text-gray-400 hover:text-white transition-colors">Book</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white transition-colors">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white transition-colors">Events</a>
+                        <a href="gallery.html" class="text-gray-400 hover:text-white transition-colors">Gallery</a>
+                    </div>
+                    <div class="flex justify-center items-center space-x-6 mb-6">
+                        <a href="mailto:contact@drmursal.com" class="text-gray-400 hover:text-white transition-colors">
+                            📧 contact@drmursal.com
+                        </a>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        © 2026 Dr. Abdulqadir Abukar Mursal. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize page functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Mobile menu functionality
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+            
+            // Scroll animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+            
+            const revealElements = document.querySelectorAll('.reveal');
+            revealElements.forEach(el => observer.observe(el));
+            
+            // Timeline animation
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            timelineItems.forEach((item, index) => {
+                setTimeout(() => {
+                    observer.observe(item);
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr. Abdulqadir Abukar Mursal - Cilmi Nafsiga Aadanaha</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&family=Crimson+Text:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a365d;
+            --secondary: #d69e2e;
+            --accent: #38b2ac;
+            --background: #fafafa;
+            --text: #2d3748;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+        }
+        
+        .font-display { font-family: 'Playfair Display', serif; }
+        .font-accent { font-family: 'Crimson Text', serif; }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, rgba(26, 54, 93, 0.8), rgba(214, 158, 46, 0.6)), 
+                        url('resources/hero-psychology.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(26, 54, 93, 0.3);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary), #ed8936);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(214, 158, 46, 0.3);
+        }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stats-counter {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .floating-shapes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .event-card {
+            background: white;
+            border-left: 4px solid var(--secondary);
+            transition: all 0.3s ease;
+        }
+        
+        .event-card:hover {
+            border-left-color: var(--accent);
+            transform: translateX(8px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 backdrop-blur-sm shadow-sm z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <a href="#home" class="font-display text-xl font-bold text-gray-900">
+                        Dr. Abdulqadir Mursal
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#home" class="nav-link text-gray-900 hover:text-yellow-600">Home</a>
+                        <a href="book.html" class="nav-link text-gray-700 hover:text-yellow-600">Book</a>
+                        <a href="about.html" class="nav-link text-gray-700 hover:text-yellow-600">About</a>
+                        <a href="events.html" class="nav-link text-gray-700 hover:text-yellow-600">Events</a>
+                        <a href="gallery.html" class="nav-link text-gray-700 hover:text-yellow-600">Gallery</a>
+                        <a href="#purchase" class="btn-primary text-white px-6 py-2 rounded-full text-sm font-medium">Get the Book</a>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-700 hover:text-yellow-600">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="#home" class="block px-3 py-2 text-gray-900 hover:text-yellow-600">Home</a>
+                <a href="book.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Book</a>
+                <a href="about.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">About</a>
+                <a href="events.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Events</a>
+                <a href="gallery.html" class="block px-3 py-2 text-gray-700 hover:text-yellow-600">Gallery</a>
+                <a href="#purchase" class="block px-3 py-2 text-yellow-600 font-medium">Get the Book</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg min-h-screen flex items-center relative overflow-hidden">
+        <div class="floating-shapes" id="floating-shapes"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="text-white">
+                    <div class="reveal">
+                        <span class="inline-block bg-yellow-500 text-gray-900 px-4 py-2 rounded-full text-sm font-medium mb-6">
+                            New Release – Psychology Book
+                        </span>
+                    </div>
+                    <h1 class="font-display text-5xl lg:text-6xl font-bold mb-6 reveal">
+                        Exploring the Depths of
+                        <span class="gradient-text">Human Psychology</span>
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-100 reveal">
+                        Dr. Abdulqadir Abukar Mursal presents "Cilmi Nafsiga Aadanaha" – a comprehensive guide to understanding human psychology, its foundations, and practical applications in modern life.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 mb-12 reveal">
+                        <a href="#purchase" class="btn-primary text-white px-8 py-4 rounded-full text-lg font-medium text-center">
+                            Order Your Copy
+                        </a>
+                        <a href="#book" class="btn-secondary text-white px-8 py-4 rounded-full text-lg font-medium text-center">
+                            Learn More
+                        </a>
+                    </div>
+                    <div class="grid grid-cols-3 gap-8 reveal">
+                        <div class="text-center">
+                            <div class="stats-counter" data-target="10">0</div>
+                            <p class="text-gray-200">Years Research</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="stats-counter" data-target="15">0</div>
+                            <p class="text-gray-200">Chapters</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="stats-counter" data-target="500">0</div>
+                            <p class="text-gray-200">Pages</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="reveal">
+                    <div class="relative">
+                        <img src="resources/new.jpg" alt="Cilmi Nafsiga Aadanaha Book Cover" 
+                             class="w-full max-w-md mx-auto rounded-lg shadow-2xl transform hover:scale-105 transition-transform duration-300">
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-yellow-500 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg animate-pulse">
+                            NEW
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Book Section -->
+    <section id="book" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">The Book</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    A groundbreaking work in Somali psychology literature
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <img src="resources/book client.png" alt="Cilmi Nafsiga Aadanaha" 
+                         class="w-full max-w-lg mx-auto rounded-lg shadow-xl card-hover">
+                </div>
+                <div class="reveal">
+                    <h3 class="font-display text-3xl font-bold text-gray-900 mb-4">
+                        Cilmi Nafsiga Aadanaha
+                    </h3>
+                    <p class="text-lg text-gray-600 mb-6 font-accent">
+                        "The Foundations of Human Psychology"
+                    </p>
+                    <p class="text-gray-700 mb-8 leading-relaxed">
+                        This comprehensive book explores the diverse branches of psychology, its historical development, 
+                        prominent figures who shaped the field, and the major theories that continue to influence our 
+                        understanding of human behavior and mental processes.
+                    </p>
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-700">Comprehensive introduction to psychology fundamentals</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-700">Research-based approaches and methodologies</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-700">Major psychological theories explained</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-700">Practical applications for health and social care</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-6 h-6 bg-teal-500 rounded-full flex items-center justify-center mr-4">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <span class="text-gray-700">Written in accessible Somali language</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#purchase" class="btn-primary text-white px-8 py-3 rounded-full text-lg font-medium text-center">
+                            Purchase Now
+                        </a>
+                        <button id="preview-btn" class="border-2 border-gray-300 text-gray-700 px-8 py-3 rounded-full text-lg font-medium hover:border-yellow-500 hover:text-yellow-600 transition-colors">
+                            Preview Sample
+                        </button>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">
+                        Available in print. Digital edition coming soon.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Author Section -->
+    <section id="author" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">About the Author</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Dr. Abdulqadir Abukar Mursal is a distinguished psychologist and academic at Mogadishu University.
+                </p>
+            </div>
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal">
+                    <img src="resources/author.jpeg" alt="Dr. Abdulqadir Abukar Mursal" 
+                         class="w-full max-w-md mx-auto rounded-lg shadow-xl card-hover">
+                </div>
+                <div class="reveal">
+                    <h3 class="font-display text-3xl font-bold text-gray-900 mb-6">
+                        Dr. Abdulqadir Abukar Mursal
+                    </h3>
+                    <p class="text-gray-700 mb-8 leading-relaxed">
+                        With years of dedication to the field of psychology, he has become a leading voice in mental health 
+                        education across Somalia. His passion for making psychological knowledge accessible has driven him 
+                        to write comprehensive materials in Somali, ensuring that students and professionals alike can 
+                        benefit from evidence-based psychological insights in their native language.
+                    </p>
+                    <div class="grid grid-cols-2 gap-6">
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Academic Excellence</h4>
+                            <p class="text-gray-600 text-sm">Lecturer at Mogadishu University, Faculty of Health Sciences</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Expert Speaker</h4>
+                            <p class="text-gray-600 text-sm">Renowned presenter on psychology and mental health topics</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Published Author</h4>
+                            <p class="text-gray-600 text-sm">Author of groundbreaking works in Somali psychology</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg shadow-md card-hover">
+                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4">
+                                <svg class="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z"></path>
+                                </svg>
+                            </div>
+                            <h4 class="font-semibold text-gray-900 mb-2">Community Leader</h4>
+                            <p class="text-gray-600 text-sm">Dedicated to advancing psychological education in Somalia</p>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <a href="about.html" class="btn-primary text-white px-8 py-3 rounded-full text-lg font-medium">
+                            Learn More About Dr. Mursal
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Events Section -->
+    <section id="events" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">Events & Book Signings</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Join us at upcoming events to meet the author and learn more about psychology
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="event-card p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="text-sm text-yellow-600 font-medium mb-2">January 15, 2025</div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Book Signing</h3>
+                    <h4 class="font-semibold text-gray-700 mb-2">Book Signing at Mogadishu University</h4>
+                    <p class="text-gray-600 mb-4">
+                        Meet Dr. Mursal and get your copy of Cilmi Nafsiga Aadanaha signed.
+                    </p>
+                    <div class="text-sm text-gray-500 mb-4">
+                        <p>📅 January 15, 2025</p>
+                        <p>🕐 10:00 AM - 2:00 PM</p>
+                        <p>📍 Main Campus, Mogadishu</p>
+                    </div>
+                    <button class="text-yellow-600 font-medium hover:text-yellow-700 transition-colors">
+                        Learn More →
+                    </button>
+                </div>
+                <div class="event-card p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="text-sm text-yellow-600 font-medium mb-2">February 8, 2025</div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Public Lecture</h3>
+                    <h4 class="font-semibold text-gray-700 mb-2">Psychology in Health & Social Care</h4>
+                    <p class="text-gray-600 mb-4">
+                        An in-depth exploration of the role of psychology within health and social care settings.
+                    </p>
+                    <div class="text-sm text-gray-500 mb-4">
+                        <p>📅 February 8, 2025</p>
+                        <p>🕐 3:00 PM - 5:00 PM</p>
+                        <p>📍 Faculty of Health Sciences</p>
+                    </div>
+                    <button class="text-yellow-600 font-medium hover:text-yellow-700 transition-colors">
+                        Learn More →
+                    </button>
+                </div>
+                <div class="event-card p-6 rounded-lg shadow-md card-hover reveal">
+                    <div class="text-sm text-yellow-600 font-medium mb-2">March 20, 2025</div>
+                    <h3 class="font-display text-xl font-bold text-gray-900 mb-3">Book Exhibition</h3>
+                    <h4 class="font-semibold text-gray-700 mb-2">Somali Education Fair</h4>
+                    <p class="text-gray-600 mb-4">
+                        Visit our booth at the annual education fair to explore all publications.
+                    </p>
+                    <div class="text-sm text-gray-500 mb-4">
+                        <p>📅 March 20, 2025</p>
+                        <p>🕐 9:00 AM - 6:00 PM</p>
+                        <p>📍 National Convention Center</p>
+                    </div>
+                    <button class="text-yellow-600 font-medium hover:text-yellow-700 transition-colors">
+                        Learn More →
+                    </button>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="events.html" class="btn-primary text-white px-8 py-3 rounded-full text-lg font-medium">
+                    View All Events
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Preview -->
+    <section id="gallery" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal">
+                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">Photo Gallery</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Moments from lectures, book signings, and academic events
+                </p>
+            </div>
+            <div class="splide" id="gallery-carousel">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <li class="splide__slide">
+                            <div class="relative rounded-lg overflow-hidden shadow-lg card-hover">
+                                <img src="resources/gallery/img (1).jpeg" alt="Public Lecture on Psychology" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                                    <h3 class="text-white font-semibold">Public Lecture on Psychology</h3>
+                                    <p class="text-gray-200 text-sm">At Mogadishu University</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="relative rounded-lg overflow-hidden shadow-lg card-hover">
+                                <img src="resources/gallery/img (20).jpeg" alt="Book Signing Event" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                                    <h3 class="text-white font-semibold">Book Signing Event</h3>
+                                    <p class="text-gray-200 text-sm">Meeting with readers</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="splide__slide">
+                            <div class="relative rounded-lg overflow-hidden shadow-lg card-hover">
+                                <img src="resources/book client.png" alt="The Book" 
+                                     class="w-full h-64 object-cover">
+                                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                                    <h3 class="text-white font-semibold">Cilmi Nafsiga Aadanaha</h3>
+                                    <p class="text-gray-200 text-sm">The book launch</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center mt-12">
+                <a href="gallery.html" class="btn-primary text-white px-8 py-3 rounded-full text-lg font-medium">
+                    View Full Gallery
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Purchase Section -->
+    <section id="purchase" class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <h2 class="font-display text-4xl font-bold text-gray-900 mb-4">Get Your Copy</h2>
+                <p class="text-xl text-gray-600 mb-12">
+                    Start your journey into understanding human psychology today
+                </p>
+                <div class="bg-gray-50 rounded-2xl p-8 shadow-lg">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
+                        <div>
+                            <img src="resources/book client.png" alt="Book Cover" 
+                                 class="w-full max-w-xs mx-auto rounded-lg shadow-md">
+                        </div>
+                        <div class="text-left">
+                            <h3 class="font-display text-2xl font-bold text-gray-900 mb-4">
+                                Cilmi Nafsiga Aadanaha
+                            </h3>
+                            <p class="text-gray-600 mb-6">
+                                By Dr. Abdulqadir Abukar Mursal
+                            </p>
+                            <div class="mb-6">
+                                <span class="text-3xl font-bold text-yellow-600">$29.99</span>
+                                <span class="text-gray-500 line-through ml-2">$39.99</span>
+                            </div>
+                            <div class="space-y-3 mb-8">
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Free shipping within Somalia
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    30-day money-back guarantee
+                                </div>
+                                <div class="flex items-center text-sm text-gray-600">
+                                    <svg class="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Secure payment processing
+                                </div>
+                            </div>
+                            <button id="order-btn" class="w-full btn-primary text-white px-8 py-4 rounded-full text-lg font-medium">
+                                Order Now - $29.99
+                            </button>
+                            <p class="text-xs text-gray-500 mt-4 text-center">
+                                Digital edition coming soon
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="mb-8">
+                    <h3 class="font-display text-2xl font-bold mb-4">Dr. Abdulqadir Abukar Mursal</h3>
+                    <p class="text-gray-400 max-w-2xl mx-auto">
+                        Psychologist, author, and educator dedicated to advancing psychological knowledge 
+                        and mental health awareness in Somalia.
+                    </p>
+                </div>
+                <div class="border-t border-gray-800 pt-8">
+                    <div class="flex flex-wrap justify-center gap-6 mb-6">
+                        <a href="#home" class="text-gray-400 hover:text-white transition-colors">Home</a>
+                        <a href="book.html" class="text-gray-400 hover:text-white transition-colors">Book</a>
+                        <a href="about.html" class="text-gray-400 hover:text-white transition-colors">About</a>
+                        <a href="events.html" class="text-gray-400 hover:text-white transition-colors">Events</a>
+                        <a href="gallery.html" class="text-gray-400 hover:text-white transition-colors">Gallery</a>
+                    </div>
+                    <div class="flex justify-center items-center space-x-6 mb-6">
+                        <a href="mailto:contact@drmursal.com" class="text-gray-400 hover:text-white transition-colors">
+                            📧 contact@drmursal.com
+                        </a>
+                    </div>
+                    <p class="text-gray-500 text-sm">
+                        © 2026 Dr. Abdulqadir Abukar Mursal. All rights reserved.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="font-display text-2xl font-bold text-gray-900">Book Preview</h3>
+                    <button id="close-modal" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <img src="resources/book client.png" alt="Book Cover" class="w-full rounded-lg shadow-md">
+                    </div>
+                    <div>
+                        <h4 class="font-display text-xl font-bold text-gray-900 mb-4">Table of Contents</h4>
+                        <div class="space-y-2 text-sm">
+                            <p><strong>Chapter 1:</strong> Introduction to Psychology</p>
+                            <p><strong>Chapter 2:</strong> History of Psychological Thought</p>
+                            <p><strong>Chapter 3:</strong> Research Methods in Psychology</p>
+                            <p><strong>Chapter 4:</strong> Biological Bases of Behavior</p>
+                            <p><strong>Chapter 5:</strong> Sensation and Perception</p>
+                            <p><strong>Chapter 6:</strong> Learning and Memory</p>
+                            <p><strong>Chapter 7:</strong> Cognitive Psychology</p>
+                            <p><strong>Chapter 8:</strong> Developmental Psychology</p>
+                            <p><strong>Chapter 9:</strong> Personality Theories</p>
+                            <p><strong>Chapter 10:</strong> Social Psychology</p>
+                            <p><strong>Chapter 11:</strong> Psychological Disorders</p>
+                            <p><strong>Chapter 12:</strong> Therapeutic Approaches</p>
+                            <p><strong>Chapter 13:</strong> Health Psychology</p>
+                            <p><strong>Chapter 14:</strong> Organizational Psychology</p>
+                            <p><strong>Chapter 15:</strong> Future of Psychology</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                    <h5 class="font-semibold text-gray-900 mb-2">Sample Content</h5>
+                    <p class="text-gray-700 text-sm leading-relaxed">
+                        "Psychology as a scientific discipline seeks to understand human behavior and mental processes 
+                        through systematic observation, measurement, and interpretation. This comprehensive work aims 
+                        to provide Somali-speaking students and professionals with accessible, evidence-based knowledge 
+                        that can be applied in various contexts, from clinical practice to community development..."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+</body>
+</html>
